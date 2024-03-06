@@ -5,6 +5,8 @@
 #define int long long // work with 64bit target
 
 int token;
+int *text, *old_text, *stack;
+char *data;
 
 void next() {
   token = *src++;
