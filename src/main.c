@@ -25,7 +25,8 @@ void program() {
 
 int eval() { return 0; }
 
-int main(int argc, char **argv) {
+int main(int **argc, char **argv) {
+  // int main() {
   int i, fd;
   argc--;
   argv++;
@@ -51,6 +52,24 @@ int main(int argc, char **argv) {
 
     src[i] = 0;
     closed(fd);
+
+    if (!(text = old_text = malloc(poolsize))) {
+    printf("could not malloc(%d) for text area\n", poolsize);
+    return -1;
+       }
+       if (!(data = malloc(poolsize))) {
+    printf("could not malloc(%d) for data area\n", poolsize);
+    return -1;
+       }
+       if (!(stack = malloc(poolsize))) {
+    printf("could not malloc(%d) for stack area\n", poolsize);
+    return -1;
+       }
+
+       memset(text, 0, poolsize);
+       memset(data, 0, poolsize);
+       memset(stack, 0, poolsize);
+
     program()
     return eval();
 }
