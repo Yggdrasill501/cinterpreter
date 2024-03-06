@@ -5,5 +5,4 @@ project(Cinterpreter Version 1.0.0 LANGUAGES C)
 set(CMAKE_C_STANDARD C17)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
-add_executable(Cinterpreter src/main.c)
-
+add_executable(Cinterpreter src/main.c src/eval.c src/expression.c src/next.c src/next.cd src/program.c)
