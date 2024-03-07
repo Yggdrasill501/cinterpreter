@@ -81,6 +81,17 @@ int eval() {
       ax = *(char *)*sp++ = ax;
     } else if (op == SI) {
       *(int *)*sp++ = ax;
+    } else if (op == PUSH) {
+      *--sp = ax;
+    } else if (op == JMP) {
+      pc = (int *)*pc;
+    } else if (op == JZ) {
+      pc = ax ? pc + 1 : (int *)*pc;
+    } else if (op == JNZ) {
+      pc = ax ? (int *)*pc : pc + 1;
+    } else if (op == CALL) {
+      *--sp = (int)(pc + 1);
+      pc = (int *)*pc;
     }
   }
   return 0;
