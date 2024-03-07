@@ -66,7 +66,25 @@ void program() {
   }
 }
 
-int eval() { return 0; }
+int eval() {
+  int op, *tmp;
+
+  while (1) {
+    op = *pc++;
+    if (op == IMM) {
+      ax = *pc++;
+    } else if (op == LC) {
+      ax = *(char *)ax;
+    } else if (op == LI) {
+      ax = *(int *)ax;
+    } else if (op == SC) {
+      ax = *(char *)*sp++ = ax;
+    } else if (op == SI) {
+      *(int *)*sp++ = ax;
+    }
+  }
+  return 0;
+}
 
 int main(int **argc, char **argv) {
   // int main() {
