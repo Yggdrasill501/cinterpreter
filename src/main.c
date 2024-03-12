@@ -52,7 +52,11 @@ enum {
 };
 
 void next() {
-  token = *src++;
+    char *last_pos;
+    int hash;
+    while (token = *src++){
+        ++src;
+    }
   return;
 }
 
