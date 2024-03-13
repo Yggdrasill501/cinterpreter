@@ -69,6 +69,11 @@ enum {
   Assign, Cond, Lor, Lan, Or, Xor, And, Eq, Ne, Lt, Gt, Le, Ge, Shl, Shr, Add, Sub, Mul, Div, Mod, Inc, Dec, Brak
 };
 
+int token_val;                // value of current token (mainly for number)
+int *current_id,              // current parsed ID
+    *symbols;                 // symbol table
+enum {Token, Hash, Name, Type, Class, Value, BType, BClass, BValue, IdSize};
+
 void next() {
     char *last_pos;
     int hash;
@@ -79,8 +84,28 @@ void next() {
         }else if (token == '#') {   // skip macro, because we will not support it
             while (*src != 0 && *src != '\n') {
             src++;
-    }
-}
+            }
+        } else if ((token >= 'a' && token <= 'z') || (token >= 'A' && token <= 'Z') || (token == '_')) { // parse identifier
+            last_pos = src - 1;
+            hash = token;
+            while ((*src >= 'a' && *src <= 'z') || (*src >= 'A' && *src <= 'Z') || (*src >= '0' && *src <= '9') || (*src == '_')) {
+                hash = hash * 147 + *src;
+                src++;
+            }
+            current_id = symbols;
+            while (current_id[Token]) {
+                if (current_id[Hash] == hash && !memcmp((char *)current_id[Name], last_pos, src - last_pos)) {
+                    //found one, return
+                    token = current_id[Token];
+                    return;
+                }
+                current_id = current_id + IdSize;
+            }
+            current_id[Name] = (int)last_pos;
+            current_id[Hash] = hash;
+            token = current_id[Token] = Id;
+            return;
+        }
     }
   return;
 }
