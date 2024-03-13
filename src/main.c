@@ -177,9 +177,8 @@ void next() {
             } else {
                 token = Assign;
             }
-            return;
-        }
-        else if (token == '+') {
+            return; 
+        } else if (token == '+') {
             // parse '+' and '++'
             if (*src == '+') {
                 src ++;
@@ -188,8 +187,7 @@ void next() {
                 token = Add;
             }
             return;
-        }
-        else if (token == '-') {
+        } else if (token == '-') {
             // parse '-' and '--'
             if (*src == '-') {
                 src ++;
@@ -198,16 +196,14 @@ void next() {
                 token = Sub;
             }
             return;
-        }
-        else if (token == '!') {
+        } else if (token == '!') {
             // parse '!='
             if (*src == '=') {
                 src++;
                 token = Ne;
             }
             return;
-        }
-        else if (token == '<') {
+        } else if (token == '<') {
             // parse '<=', '<<' or '<'
             if (*src == '=') {
                 src ++;
@@ -219,8 +215,7 @@ void next() {
                 token = Lt;
             }
             return;
-        }
-        else if (token == '>') {
+        } else if (token == '>') {
             // parse '>=', '>>' or '>'
             if (*src == '=') {
                 src ++;
@@ -232,8 +227,7 @@ void next() {
                 token = Gt;
             }
             return;
-        }
-        else if (token == '|') {
+        } else if (token == '|') {
             // parse '|' or '||'
             if (*src == '|') {
                 src ++;
@@ -242,8 +236,7 @@ void next() {
                 token = Or;
             }
             return;
-        }
-        else if (token == '&') {
+        } else if (token == '&') {
             // parse '&' and '&&'
             if (*src == '&') {
                 src ++;
@@ -252,28 +245,22 @@ void next() {
                 token = And;
             }
             return;
-        }
-        else if (token == '^') {
+        } else if (token == '^') {
             token = Xor;
             return;
-        }
-        else if (token == '%') {
+        } else if (token == '%') {
             token = Mod;
             return;
-        }
-        else if (token == '*') {
+        } else if (token == '*') {
             token = Mul;
             return;
-        }
-        else if (token == '[') {
+        } else if (token == '[') {
             token = Brak;
             return;
-        }
-        else if (token == '?') {
+        } else if (token == '?') {
             token = Cond;
             return;
-        }
-        else if (token == '~' || token == ';' || token == '{' || token == '}' || token == '(' || token == ')' || token == ']' || token == ',' || token == ':') {
+        } else if (token == '~' || token == ';' || token == '{' || token == '}' || token == '(' || token == ')' || token == ']' || token == ',' || token == ':') {
             // directly return the character as token;
             return;
         }
@@ -288,8 +275,6 @@ void program() {
   while (token > 0) {
     printf("Token is: %c\n", token);
     next();
-    
-   
   }
 }
 
@@ -385,7 +370,11 @@ int eval() {
   return 0;
 }
 
-int main(int **argc, char **argv) {
+enum { CHAR, INT, PTR };
+int *idmain;                  // the `main` function
+
+
+int main(int argc, char **argv) {
   int i, fd;
   argc--;
   argv++;
@@ -437,8 +426,30 @@ int main(int **argc, char **argv) {
   bp = sp = (int *)((int)stack + poolsize );
   
   ax = 0 ;
-
   
+  src = "char else enum if int return sizeof while "
+      "open read close printf malloc memset memcmp exit void main";
+  
+  i = Char;
+  while (i <= While){
+    next();
+    current_id[Token] = i++
+  }
+
+  i = OPEN;
+  while (i <= EXIT) {
+      next();
+      current_id[Class] = Sys;
+      current_id[Type] = INT;
+      current_id[Value] = i++;
+  }
+
+  next();
+  current_id[Token] = Char;
+  
+  next();
+  idmain = current_id;
+
   program();
   
   return eval();
