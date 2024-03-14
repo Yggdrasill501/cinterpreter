@@ -338,8 +338,7 @@ void expression(int level) {}
 void program() {
   next();
   while (token > 0) {
-    printf("Token is: %c\n", token);
-    next();
+      global_declaration();
   }
 }
 
