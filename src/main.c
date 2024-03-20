@@ -558,14 +558,3 @@ int expr_tail(int lvalue) {
 
     return eval();
   }
-
-  // int main(int argc, char *argv[]){
-  //     size_t linecap = 0;
-  //     ssize_t linelen;
-  //     while ((linelen = getline(&line, &linecap, stdin)) > 0) {
-  //         src = line;
-  //         next();
-  //         printf("%d\n", expr());
-  //     }
-  // //     return 0;
-  // }
