@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define int long long // work with 64bit target
+#define int long long 
 
-enum { NUM };
+enum {NUM};
 
 int token;
 int token_val;
@@ -110,8 +110,8 @@ enum {
   Brak
 };
 
-int *current_id, // current parsed ID
-    *symbols;    // symbol table
+int *current_id, 
+    *symbols;    
 enum { Token, Hash, Name, Type, Class, Value, BType, BClass, BValue, IdSize };
 
 void next() {
@@ -121,13 +121,13 @@ void next() {
     ++src;
     if (token == '\n') {
       ++line;
-    } else if (token == '#') { // skip macro, because we will not support it
+    } else if (token == '#') { 
       while (*src != 0 && *src != '\n') {
         src++;
       }
     } else if ((token >= 'a' && token <= 'z') ||
                (token >= 'A' && token <= 'Z') ||
-               (token == '_')) { // parse identifier
+               (token == '_')) { 
       last_pos = src - 1;
       hash = token;
       while ((*src >= 'a' && *src <= 'z') || (*src >= 'A' && *src <= 'Z') ||
@@ -139,7 +139,6 @@ void next() {
       while (current_id[Token]) {
         if (current_id[Hash] == hash &&
             !memcmp((char *)current_id[Name], last_pos, src - last_pos)) {
-          // found one, return
           token = current_id[Token];
           return;
         }
@@ -150,17 +149,13 @@ void next() {
       token = current_id[Token] = Id;
       return;
     } else if (token >= '0' && token <= '9') {
-      // parse number, three kinds: dec(123) hex(0x123) oct(017)
       token_val = token - '0';
       if (token_val > 0) {
-        // dec, starts with [1-9]
         while (*src >= '0' && *src <= '9') {
           token_val = token_val * 10 + *src++ - '0';
         }
       } else {
-        // starts with number 0
         if (*src == 'x' || *src == 'X') {
-          // hex
           token = *++src;
           while ((token >= '0' && token <= '9') ||
                  (token >= 'a' && token <= 'f') ||
@@ -169,7 +164,6 @@ void next() {
             token = *++src;
           }
         } else {
-          // oct
           while (*src >= '0' && *src <= '7') {
             token_val = token_val * 8 + *src++ - '0';
           }
@@ -178,13 +172,10 @@ void next() {
       token = Num;
       return;
     } else if (token == '"' || token == '\'') {
-      // parse string literal, currently, the only supported escape
-      // character is '\n', store the string literal into data.
       last_pos = data;
       while (*src != 0 && *src != token) {
         token_val = *src++;
         if (token_val == '\\') {
-          // escape character
           token_val = *src++;
           if (token_val == 'n') {
             token_val = '\n';
@@ -196,7 +187,6 @@ void next() {
       }
 
       src++;
-      // if it is a single character, return Num token
       if (token == '"') {
         token_val = (int)last_pos;
       } else {
@@ -206,17 +196,14 @@ void next() {
       return;
     } else if (token == '/') {
       if (*src == '/') {
-        // skip comments
         while (*src != 0 && *src != '\n') {
           ++src;
         }
       } else {
-        // divide operator
         token = Div;
         return;
       }
     } else if (token == '=') {
-      // parse '==' and '='
       if (*src == '=') {
         src++;
         token = Eq;
@@ -225,7 +212,6 @@ void next() {
       }
       return;
     } else if (token == '+') {
-      // parse '+' and '++'
       if (*src == '+') {
         src++;
         token = Inc;
@@ -234,7 +220,6 @@ void next() {
       }
       return;
     } else if (token == '-') {
-      // parse '-' and '--'
       if (*src == '-') {
         src++;
         token = Dec;
@@ -243,14 +228,12 @@ void next() {
       }
       return;
     } else if (token == '!') {
-      // parse '!='
       if (*src == '=') {
         src++;
         token = Ne;
       }
       return;
     } else if (token == '<') {
-      // parse '<=', '<<' or '<'
       if (*src == '=') {
         src++;
         token = Le;
@@ -262,7 +245,6 @@ void next() {
       }
       return;
     } else if (token == '>') {
-      // parse '>=', '>>' or '>'
       if (*src == '=') {
         src++;
         token = Ge;
@@ -274,7 +256,6 @@ void next() {
       }
       return;
     } else if (token == '|') {
-      // parse '|' or '||'
       if (*src == '|') {
         src++;
         token = Lor;
@@ -283,7 +264,6 @@ void next() {
       }
       return;
     } else if (token == '&') {
-      // parse '&' and '&&'
       if (*src == '&') {
         src++;
         token = Lan;
@@ -309,7 +289,6 @@ void next() {
     } else if (token == '~' || token == ';' || token == '{' || token == '}' ||
                token == '(' || token == ')' || token == ']' || token == ',' ||
                token == ':') {
-      // directly return the character as token;
       return;
     }
   }
@@ -378,7 +357,7 @@ int eval() {
       sp = bp;
       bp = (int *)*sp++;
       pc = (int *)*sp++;
-    } else if (op == OR) { // Mathematical actions
+    } else if (op == OR) { 
       ax = *sp++ | ax;
     } else if (op == XOR) {
       ax = *sp++ ^ ax;
@@ -410,7 +389,7 @@ int eval() {
       ax = *sp++ / ax;
     } else if (op == MOD) {
       ax = *sp++ % ax;
-    } else if (op == EXIT) { // Built in Fuctions
+    } else if (op == EXIT) { 
       printf("exit(%d)", *sp);
       return *sp;
     } else if (op == OPEN) {
@@ -458,43 +437,43 @@ int eval() {
     }
     return value;
   }
-
-  int term_tail(int lvalue) {
+}
+int term_tail(int lvalue) {
     if (token == '*') {
-      match('*');
-      int value = lvalue * factor();
-      return term_tail(value);
+        match('*');
+        int value = lvalue * factor();
+        return term_tail(value);
     } else if (token == '/') {
-      match('/');
-      int value = lvalue / factor();
-      return term_tail(value);
+        match('/');
+        int value = lvalue / factor();
+        return term_tail(value);
     } else {
-      return lvalue;
+        return lvalue;
     }
-  }
+}
 
-  int term() {
+int term() {
     int lvalue = factor();
     return term_tail(lvalue);
-  }
+}
 
-  int expr_tail(int lvalue) {
+int expr_tail(int lvalue) {
     if (token == '+') {
-      match('+');
-      int value = lvalue + term();
-      return expr_tail(value);
+        match('+');
+        int value = lvalue + term();
+        return expr_tail(value);
     } else if (token == '-') {
-      match('-');
-      int value = lvalue - term();
-      return expr_tail(value);
+        match('-');
+        int value = lvalue - term();
+        return expr_tail(value);
     } else {
-      return lvalue;
+        return lvalue;
     }
   }
 
   int expr() {
-    int lvalue = term();
-    return expr_tail(lvalue);
+      int lvalue = term();
+      return expr_tail(lvalue);
   }
 
   enum { CHAR, INT, PTR };
